@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package movie;
+
+service MoviePredictionService {
+  rpc PredictRevenue (MovieRequest) returns (PredictionResponse);
+}
+
+message MovieRequest {
+  string genre = 1;
+  float budget = 2;
+  float runtime = 3;
+  float imdb_rating = 4;
+  int64 lamport_timestamp = 5;
+}
+
+message PredictionResponse {
+  float predicted_revenue = 1;
+  string message = 2;
+  int64 lamport_timestamp = 3;
+}
