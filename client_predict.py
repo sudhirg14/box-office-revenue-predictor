@@ -5,13 +5,11 @@ import movie_pb2_grpc
 
 from lamport_clock import LamportClock
 
-
 # -------------------------------------------------
 # Create Lamport Clock for Client
 # -------------------------------------------------
 
 clock = LamportClock()
-
 
 # -------------------------------------------------
 # Connect to Prediction Server
@@ -24,7 +22,6 @@ channel = grpc.insecure_channel(
 stub = movie_pb2_grpc.MoviePredictionServiceStub(
     channel
 )
-
 
 # -------------------------------------------------
 # STEP 1: Client creates a local event
@@ -40,7 +37,6 @@ print(
     "Client Lamport Timestamp:",
     request_time
 )
-
 
 # -------------------------------------------------
 # STEP 2: Create request
@@ -59,20 +55,17 @@ request = movie_pb2.MovieRequest(
     lamport_timestamp=request_time
 )
 
-
 print("\nSending prediction request...")
 print(
     "Request Lamport Timestamp:",
     request.lamport_timestamp
 )
 
-
 # -------------------------------------------------
 # STEP 3: Send request to server
 # -------------------------------------------------
 
 response = stub.PredictRevenue(request)
-
 
 # -------------------------------------------------
 # STEP 4: Receive response and update clock
@@ -81,7 +74,6 @@ response = stub.PredictRevenue(request)
 new_time = clock.update(
     response.lamport_timestamp
 )
-
 
 print("\nResponse received from server.")
 
@@ -94,7 +86,6 @@ print(
     "Updated Client Lamport Timestamp:",
     new_time
 )
-
 
 # -------------------------------------------------
 # STEP 5: Display prediction

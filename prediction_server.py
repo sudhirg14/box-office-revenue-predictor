@@ -14,11 +14,9 @@ class MoviePredictionService(
         self.clock = LamportClock()
 
     def PredictRevenue(self, request, context):
-
         # -------------------------------------------------
         # STEP 1: Receive request and update Lamport clock
         # -------------------------------------------------
-
         current_time = self.clock.update(
             request.lamport_timestamp
         )
@@ -40,35 +38,29 @@ class MoviePredictionService(
         # -------------------------------------------------
         # STEP 2: Perform movie revenue prediction
         # -------------------------------------------------
-
         predicted_revenue = request.budget * 3.2
 
         print(
             "Predicted Revenue:",
             predicted_revenue
         )
-
         # -------------------------------------------------
         # STEP 3: Increment clock before sending response
         # -------------------------------------------------
-
         response_time = self.clock.increment()
 
         print(
             "Response Lamport Timestamp:",
             response_time
         )
-
         # -------------------------------------------------
         # STEP 4: Send response with Lamport timestamp
         # -------------------------------------------------
-
         return movie_pb2.PredictionResponse(
             predicted_revenue=predicted_revenue,
             message="Prediction completed successfully!",
             lamport_timestamp=response_time
         )
-
 
 def serve():
 

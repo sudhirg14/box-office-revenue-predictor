@@ -95,3 +95,78 @@ class MoviePredictionService:
             timeout,
             metadata,
             _registered_method=True)
+
+
+class MutexServiceStub:
+    """Ricart-Agrawala Mutual Exclusion Service
+    """
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.RequestAccess = channel.unary_unary(
+                '/movie.MutexService/RequestAccess',
+                request_serializer=movie__pb2.AccessRequest.SerializeToString,
+                response_deserializer=movie__pb2.AccessReply.FromString,
+                _registered_method=True)
+
+
+class MutexServiceServicer:
+    """Ricart-Agrawala Mutual Exclusion Service
+    """
+
+    def RequestAccess(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_MutexServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'RequestAccess': grpc.unary_unary_rpc_method_handler(
+                    servicer.RequestAccess,
+                    request_deserializer=movie__pb2.AccessRequest.FromString,
+                    response_serializer=movie__pb2.AccessReply.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'movie.MutexService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('movie.MutexService', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class MutexService:
+    """Ricart-Agrawala Mutual Exclusion Service
+    """
+
+    @staticmethod
+    def RequestAccess(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/movie.MutexService/RequestAccess',
+            movie__pb2.AccessRequest.SerializeToString,
+            movie__pb2.AccessReply.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)

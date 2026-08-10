@@ -19,3 +19,18 @@ message PredictionResponse {
   string message = 2;
   int64 lamport_timestamp = 3;
 }
+
+// Ricart-Agrawala Mutual Exclusion Service
+service MutexService {
+    rpc RequestAccess (AccessRequest) returns (AccessReply);
+}
+
+message AccessRequest {
+    int32 node_id = 1;
+    int64 timestamp = 2;
+}
+
+message AccessReply {
+    int32 node_id = 1;
+    int64 timestamp = 2;
+}

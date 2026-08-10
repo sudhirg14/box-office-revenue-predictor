@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmovie.proto\x12\x05movie\"n\n\x0cMovieRequest\x12\r\n\x05genre\x18\x01 \x01(\t\x12\x0e\n\x06\x62udget\x18\x02 \x01(\x02\x12\x0f\n\x07runtime\x18\x03 \x01(\x02\x12\x13\n\x0bimdb_rating\x18\x04 \x01(\x02\x12\x19\n\x11lamport_timestamp\x18\x05 \x01(\x03\"[\n\x12PredictionResponse\x12\x19\n\x11predicted_revenue\x18\x01 \x01(\x02\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x19\n\x11lamport_timestamp\x18\x03 \x01(\x03\x32Z\n\x16MoviePredictionService\x12@\n\x0ePredictRevenue\x12\x13.movie.MovieRequest\x1a\x19.movie.PredictionResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmovie.proto\x12\x05movie\"n\n\x0cMovieRequest\x12\r\n\x05genre\x18\x01 \x01(\t\x12\x0e\n\x06\x62udget\x18\x02 \x01(\x02\x12\x0f\n\x07runtime\x18\x03 \x01(\x02\x12\x13\n\x0bimdb_rating\x18\x04 \x01(\x02\x12\x19\n\x11lamport_timestamp\x18\x05 \x01(\x03\"[\n\x12PredictionResponse\x12\x19\n\x11predicted_revenue\x18\x01 \x01(\x02\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x19\n\x11lamport_timestamp\x18\x03 \x01(\x03\"3\n\rAccessRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"1\n\x0b\x41\x63\x63\x65ssReply\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\x32Z\n\x16MoviePredictionService\x12@\n\x0ePredictRevenue\x12\x13.movie.MovieRequest\x1a\x19.movie.PredictionResponse2I\n\x0cMutexService\x12\x39\n\rRequestAccess\x12\x14.movie.AccessRequest\x1a\x12.movie.AccessReplyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,6 +35,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_MOVIEREQUEST']._serialized_end=132
   _globals['_PREDICTIONRESPONSE']._serialized_start=134
   _globals['_PREDICTIONRESPONSE']._serialized_end=225
-  _globals['_MOVIEPREDICTIONSERVICE']._serialized_start=227
-  _globals['_MOVIEPREDICTIONSERVICE']._serialized_end=317
+  _globals['_ACCESSREQUEST']._serialized_start=227
+  _globals['_ACCESSREQUEST']._serialized_end=278
+  _globals['_ACCESSREPLY']._serialized_start=280
+  _globals['_ACCESSREPLY']._serialized_end=329
+  _globals['_MOVIEPREDICTIONSERVICE']._serialized_start=331
+  _globals['_MOVIEPREDICTIONSERVICE']._serialized_end=421
+  _globals['_MUTEXSERVICE']._serialized_start=423
+  _globals['_MUTEXSERVICE']._serialized_end=496
 # @@protoc_insertion_point(module_scope)
