@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmovie.proto\x12\x05movie\"n\n\x0cMovieRequest\x12\r\n\x05genre\x18\x01 \x01(\t\x12\x0e\n\x06\x62udget\x18\x02 \x01(\x02\x12\x0f\n\x07runtime\x18\x03 \x01(\x02\x12\x13\n\x0bimdb_rating\x18\x04 \x01(\x02\x12\x19\n\x11lamport_timestamp\x18\x05 \x01(\x03\"[\n\x12PredictionResponse\x12\x19\n\x11predicted_revenue\x18\x01 \x01(\x02\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x19\n\x11lamport_timestamp\x18\x03 \x01(\x03\"3\n\rAccessRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"1\n\x0b\x41\x63\x63\x65ssReply\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\x32Z\n\x16MoviePredictionService\x12@\n\x0ePredictRevenue\x12\x13.movie.MovieRequest\x1a\x19.movie.PredictionResponse2I\n\x0cMutexService\x12\x39\n\rRequestAccess\x12\x14.movie.AccessRequest\x1a\x12.movie.AccessReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmovie.proto\x12\x05movie\"n\n\x0cMovieRequest\x12\r\n\x05genre\x18\x01 \x01(\t\x12\x0e\n\x06\x62udget\x18\x02 \x01(\x02\x12\x0f\n\x07runtime\x18\x03 \x01(\x02\x12\x13\n\x0bimdb_rating\x18\x04 \x01(\x02\x12\x19\n\x11lamport_timestamp\x18\x05 \x01(\x03\"[\n\x12PredictionResponse\x12\x19\n\x11predicted_revenue\x18\x01 \x01(\x02\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x19\n\x11lamport_timestamp\x18\x03 \x01(\x03\"3\n\rAccessRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"1\n\x0b\x41\x63\x63\x65ssReply\x12\x0f\n\x07node_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"H\n\x0bLockRequest\x12\x13\n\x0bresource_id\x18\x01 \x01(\t\x12\x11\n\tholder_id\x18\x02 \x01(\x05\x12\x11\n\ttimestamp\x18\x03 \x01(\x05\"-\n\tLockReply\x12\x0f\n\x07granted\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2Z\n\x16MoviePredictionService\x12@\n\x0ePredictRevenue\x12\x13.movie.MovieRequest\x1a\x19.movie.PredictionResponse2I\n\x0cMutexService\x12\x39\n\rRequestAccess\x12\x14.movie.AccessRequest\x1a\x12.movie.AccessReply2w\n\x0bLockService\x12\x33\n\x0b\x41\x63quireLock\x12\x12.movie.LockRequest\x1a\x10.movie.LockReply\x12\x33\n\x0bReleaseLock\x12\x12.movie.LockRequest\x1a\x10.movie.LockReplyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,8 +39,14 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_ACCESSREQUEST']._serialized_end=278
   _globals['_ACCESSREPLY']._serialized_start=280
   _globals['_ACCESSREPLY']._serialized_end=329
-  _globals['_MOVIEPREDICTIONSERVICE']._serialized_start=331
-  _globals['_MOVIEPREDICTIONSERVICE']._serialized_end=421
-  _globals['_MUTEXSERVICE']._serialized_start=423
-  _globals['_MUTEXSERVICE']._serialized_end=496
+  _globals['_LOCKREQUEST']._serialized_start=331
+  _globals['_LOCKREQUEST']._serialized_end=403
+  _globals['_LOCKREPLY']._serialized_start=405
+  _globals['_LOCKREPLY']._serialized_end=450
+  _globals['_MOVIEPREDICTIONSERVICE']._serialized_start=452
+  _globals['_MOVIEPREDICTIONSERVICE']._serialized_end=542
+  _globals['_MUTEXSERVICE']._serialized_start=544
+  _globals['_MUTEXSERVICE']._serialized_end=617
+  _globals['_LOCKSERVICE']._serialized_start=619
+  _globals['_LOCKSERVICE']._serialized_end=738
 # @@protoc_insertion_point(module_scope)
