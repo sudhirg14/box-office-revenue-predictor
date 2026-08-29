@@ -1,3 +1,8 @@
+// =====================================================
+// Existing Movie Prediction Service
+// Experiment 2 / 3
+// =====================================================
+
 syntax = "proto3";
 
 package movie;
@@ -8,10 +13,19 @@ service MoviePredictionService {
 
 message MovieRequest {
   string genre = 1;
-  float budget = 2;
-  float runtime = 3;
-  float imdb_rating = 4;
-  int64 lamport_timestamp = 5;
+
+  float budget_million = 2;
+  int32 release_year = 3;
+  float runtime_min = 4;
+  float critic_rating = 5;
+  float audience_rating = 6;
+  float review_sentiment = 7;
+  int32 review_volume = 8;
+  float star_power = 9;
+  int32 social_media_buzz = 10;
+  float marketing_spend_million = 11;
+
+  int64 lamport_timestamp = 12;
 }
 
 message PredictionResponse {
@@ -20,7 +34,11 @@ message PredictionResponse {
   int64 lamport_timestamp = 3;
 }
 
-// Ricart-Agrawala Mutual Exclusion Service
+
+// =====================================================
+// Experiment 4: Ricart-Agrawala Mutual Exclusion
+// =====================================================
+
 service MutexService {
     rpc RequestAccess (AccessRequest) returns (AccessReply);
 }
@@ -34,6 +52,7 @@ message AccessReply {
     int32 node_id = 1;
     int64 timestamp = 2;
 }
+
 
 // =====================================================
 // Experiment 5: Deadlock Simulation and Resolution

@@ -139,10 +139,13 @@ def prepare_features(data):
             idx = feature_columns.index(genre_feature)
             features[idx] = 1
     
-    # Apply scaling
-    if scaler is not None:
+    # Apply scaling only for models that were trained using scaled features.
+    if type(model).__name__ == "XGBRegressor":
+        if scaler is None:
+            raise RuntimeError("Scaler is required for XGBoost.")
+
         features = scaler.transform(features.reshape(1, -1)).flatten()
-    
+
     return features
 
 if __name__ == '__main__':
