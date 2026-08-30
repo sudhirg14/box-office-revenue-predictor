@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from . import movie_pb2 as proto_dot_movie__pb2
+import movie_pb2 as movie__pb2
 
 GRPC_GENERATED_VERSION = '1.83.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in proto/movie_pb2_grpc.py depends on'
+        + ' but the generated code in movie_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,8 +36,8 @@ class MoviePredictionServiceStub:
         """
         self.PredictRevenue = channel.unary_unary(
                 '/movie.MoviePredictionService/PredictRevenue',
-                request_serializer=proto_dot_movie__pb2.MovieRequest.SerializeToString,
-                response_deserializer=proto_dot_movie__pb2.PredictionResponse.FromString,
+                request_serializer=movie__pb2.MovieRequest.SerializeToString,
+                response_deserializer=movie__pb2.PredictionResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +55,8 @@ def add_MoviePredictionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'PredictRevenue': grpc.unary_unary_rpc_method_handler(
                     servicer.PredictRevenue,
-                    request_deserializer=proto_dot_movie__pb2.MovieRequest.FromString,
-                    response_serializer=proto_dot_movie__pb2.PredictionResponse.SerializeToString,
+                    request_deserializer=movie__pb2.MovieRequest.FromString,
+                    response_serializer=movie__pb2.PredictionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +84,8 @@ class MoviePredictionService:
             request,
             target,
             '/movie.MoviePredictionService/PredictRevenue',
-            proto_dot_movie__pb2.MovieRequest.SerializeToString,
-            proto_dot_movie__pb2.PredictionResponse.FromString,
+            movie__pb2.MovieRequest.SerializeToString,
+            movie__pb2.PredictionResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -112,8 +112,8 @@ class MutexServiceStub:
         """
         self.RequestAccess = channel.unary_unary(
                 '/movie.MutexService/RequestAccess',
-                request_serializer=proto_dot_movie__pb2.AccessRequest.SerializeToString,
-                response_deserializer=proto_dot_movie__pb2.AccessReply.FromString,
+                request_serializer=movie__pb2.AccessRequest.SerializeToString,
+                response_deserializer=movie__pb2.AccessReply.FromString,
                 _registered_method=True)
 
 
@@ -135,8 +135,8 @@ def add_MutexServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RequestAccess': grpc.unary_unary_rpc_method_handler(
                     servicer.RequestAccess,
-                    request_deserializer=proto_dot_movie__pb2.AccessRequest.FromString,
-                    response_serializer=proto_dot_movie__pb2.AccessReply.SerializeToString,
+                    request_deserializer=movie__pb2.AccessRequest.FromString,
+                    response_serializer=movie__pb2.AccessReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -168,8 +168,8 @@ class MutexService:
             request,
             target,
             '/movie.MutexService/RequestAccess',
-            proto_dot_movie__pb2.AccessRequest.SerializeToString,
-            proto_dot_movie__pb2.AccessReply.FromString,
+            movie__pb2.AccessRequest.SerializeToString,
+            movie__pb2.AccessReply.FromString,
             options,
             channel_credentials,
             insecure,
@@ -196,13 +196,13 @@ class LockServiceStub:
         """
         self.AcquireLock = channel.unary_unary(
                 '/movie.LockService/AcquireLock',
-                request_serializer=proto_dot_movie__pb2.LockRequest.SerializeToString,
-                response_deserializer=proto_dot_movie__pb2.LockReply.FromString,
+                request_serializer=movie__pb2.LockRequest.SerializeToString,
+                response_deserializer=movie__pb2.LockReply.FromString,
                 _registered_method=True)
         self.ReleaseLock = channel.unary_unary(
                 '/movie.LockService/ReleaseLock',
-                request_serializer=proto_dot_movie__pb2.LockRequest.SerializeToString,
-                response_deserializer=proto_dot_movie__pb2.LockReply.FromString,
+                request_serializer=movie__pb2.LockRequest.SerializeToString,
+                response_deserializer=movie__pb2.LockReply.FromString,
                 _registered_method=True)
 
 
@@ -230,13 +230,13 @@ def add_LockServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'AcquireLock': grpc.unary_unary_rpc_method_handler(
                     servicer.AcquireLock,
-                    request_deserializer=proto_dot_movie__pb2.LockRequest.FromString,
-                    response_serializer=proto_dot_movie__pb2.LockReply.SerializeToString,
+                    request_deserializer=movie__pb2.LockRequest.FromString,
+                    response_serializer=movie__pb2.LockReply.SerializeToString,
             ),
             'ReleaseLock': grpc.unary_unary_rpc_method_handler(
                     servicer.ReleaseLock,
-                    request_deserializer=proto_dot_movie__pb2.LockRequest.FromString,
-                    response_serializer=proto_dot_movie__pb2.LockReply.SerializeToString,
+                    request_deserializer=movie__pb2.LockRequest.FromString,
+                    response_serializer=movie__pb2.LockReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -268,8 +268,8 @@ class LockService:
             request,
             target,
             '/movie.LockService/AcquireLock',
-            proto_dot_movie__pb2.LockRequest.SerializeToString,
-            proto_dot_movie__pb2.LockReply.FromString,
+            movie__pb2.LockRequest.SerializeToString,
+            movie__pb2.LockReply.FromString,
             options,
             channel_credentials,
             insecure,
@@ -295,8 +295,8 @@ class LockService:
             request,
             target,
             '/movie.LockService/ReleaseLock',
-            proto_dot_movie__pb2.LockRequest.SerializeToString,
-            proto_dot_movie__pb2.LockReply.FromString,
+            movie__pb2.LockRequest.SerializeToString,
+            movie__pb2.LockReply.FromString,
             options,
             channel_credentials,
             insecure,

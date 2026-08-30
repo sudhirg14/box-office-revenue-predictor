@@ -2,13 +2,13 @@ from concurrent import futures
 from lamport_clock import LamportClock
 
 import os
+import sys
+import time
+import random
 
 import grpc
 import joblib
-import numpy as np
 import pandas as pd
-
-
 
 import movie_pb2
 import movie_pb2_grpc
@@ -16,8 +16,18 @@ import movie_pb2_grpc
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-MODEL_PATH = os.path.join(BASE_DIR, "models", "best_model.pkl")
-SCALER_PATH = os.path.join(BASE_DIR, "models", "scaler.pkl")
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "best_model.pkl"
+)
+
+SCALER_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "scaler.pkl"
+)
+
 FEATURE_COLUMNS_PATH = os.path.join(
     BASE_DIR,
     "models",
@@ -29,43 +39,68 @@ class MoviePredictionService(
     movie_pb2_grpc.MoviePredictionServiceServicer
 ):
 
-    def __init__(self):
+    def __init__(self, worker_name):
+
+        # -------------------------------------------------
+        # Worker Information
+        # -------------------------------------------------
+
+        self.worker_name = worker_name
 
         # -------------------------------------------------
         # Lamport Logical Clock
         # -------------------------------------------------
+
         self.clock = LamportClock()
 
         # -------------------------------------------------
         # Load trained ML model
         # -------------------------------------------------
-        print("Loading trained prediction model...")
+
+        print(
+            f"[{self.worker_name}] "
+            "Loading trained prediction model..."
+        )
 
         if not os.path.exists(MODEL_PATH):
+
             raise FileNotFoundError(
                 f"Model not found: {MODEL_PATH}"
             )
 
         if not os.path.exists(FEATURE_COLUMNS_PATH):
+
             raise FileNotFoundError(
                 f"Feature columns not found: "
                 f"{FEATURE_COLUMNS_PATH}"
             )
 
-        self.model = joblib.load(MODEL_PATH)
+        self.model = joblib.load(
+            MODEL_PATH
+        )
+
         self.feature_columns = joblib.load(
             FEATURE_COLUMNS_PATH
         )
 
-        # Scaler is needed only if the selected model
-        # was trained using scaled features.
+        # Scaler is needed only if the selected
+        # model was trained using scaled features.
+
         self.scaler = None
 
         if os.path.exists(SCALER_PATH):
-            self.scaler = joblib.load(SCALER_PATH)
 
-        print("✓ ML model loaded successfully")
+            self.scaler = joblib.load(
+                SCALER_PATH
+            )
+
         print(
+            f"[{self.worker_name}] "
+            "✓ ML model loaded successfully"
+        )
+
+        print(
+            f"[{self.worker_name}] "
             f"✓ Number of model features: "
             f"{len(self.feature_columns)}"
         )
@@ -76,24 +111,45 @@ class MoviePredictionService(
 
     def prepare_features(self, request):
 
-        # Create DataFrame with exactly the fields used
-        # by the training pipeline.
+        # Create DataFrame with exactly the fields
+        # used by the training pipeline.
 
         input_data = {
-            "budget_million": request.budget_million,
-            "release_year": request.release_year,
-            "runtime_min": request.runtime_min,
-            "critic_rating": request.critic_rating,
-            "audience_rating": request.audience_rating,
-            "review_sentiment": request.review_sentiment,
-            "review_volume": request.review_volume,
-            "star_power": request.star_power,
-            "social_media_buzz": request.social_media_buzz,
+
+            "budget_million":
+                request.budget_million,
+
+            "release_year":
+                request.release_year,
+
+            "runtime_min":
+                request.runtime_min,
+
+            "critic_rating":
+                request.critic_rating,
+
+            "audience_rating":
+                request.audience_rating,
+
+            "review_sentiment":
+                request.review_sentiment,
+
+            "review_volume":
+                request.review_volume,
+
+            "star_power":
+                request.star_power,
+
+            "social_media_buzz":
+                request.social_media_buzz,
+
             "marketing_spend_million":
                 request.marketing_spend_million
         }
 
-        df = pd.DataFrame([input_data])
+        df = pd.DataFrame(
+            [input_data]
+        )
 
         # -------------------------------------------------
         # Genre one-hot encoding
@@ -104,22 +160,30 @@ class MoviePredictionService(
         for feature in self.feature_columns:
 
             if feature.startswith("genre_"):
+
                 df[feature] = (
-                    1 if feature == f"genre_{genre}"
+
+                    1
+                    if feature == f"genre_{genre}"
                     else 0
+
                 )
 
         # -------------------------------------------------
         # Make sure every training feature exists
-        # and is in exactly the same order.
         # -------------------------------------------------
 
         for feature in self.feature_columns:
 
             if feature not in df.columns:
+
                 df[feature] = 0
 
-        df = df[self.feature_columns]
+        # Ensure exact feature order
+
+        df = df[
+            self.feature_columns
+        ]
 
         return df
 
@@ -127,7 +191,11 @@ class MoviePredictionService(
     # gRPC PREDICTION
     # =====================================================
 
-    def PredictRevenue(self, request, context):
+    def PredictRevenue(
+        self,
+        request,
+        context
+    ):
 
         # -------------------------------------------------
         # STEP 1: Receive request
@@ -137,9 +205,12 @@ class MoviePredictionService(
             request.lamport_timestamp
         )
 
-        print("\n----------------------------------------")
-        print("Movie Prediction Request Received")
-        print("----------------------------------------")
+        print("\n========================================")
+        print(
+            f"[{self.worker_name}] "
+            "MOVIE PREDICTION REQUEST"
+        )
+        print("========================================")
 
         print(
             "Received Lamport Timestamp:",
@@ -151,17 +222,87 @@ class MoviePredictionService(
             current_time
         )
 
+        print(
+            "Worker:",
+            self.worker_name
+        )
+
+        # -------------------------------------------------
+        # Experiment 6:
+        # Simulate variable processing time
+        # -------------------------------------------------
+
+        processing_time = random.uniform(
+            1.0,
+            3.0
+        )
+
+        print(
+            f"[{self.worker_name}] "
+            f"Simulated processing time: "
+            f"{processing_time:.2f} seconds"
+        )
+
+        time.sleep(
+            processing_time
+        )
+
+        # -------------------------------------------------
+        # Display Movie Features
+        # -------------------------------------------------
+
         print("\nMovie Features:")
-        print("Genre:", request.genre)
-        print("Budget:", request.budget_million)
-        print("Release Year:", request.release_year)
-        print("Runtime:", request.runtime_min)
-        print("Critic Rating:", request.critic_rating)
-        print("Audience Rating:", request.audience_rating)
-        print("Review Sentiment:", request.review_sentiment)
-        print("Review Volume:", request.review_volume)
-        print("Star Power:", request.star_power)
-        print("Social Media Buzz:", request.social_media_buzz)
+
+        print(
+            "Genre:",
+            request.genre
+        )
+
+        print(
+            "Budget:",
+            request.budget_million
+        )
+
+        print(
+            "Release Year:",
+            request.release_year
+        )
+
+        print(
+            "Runtime:",
+            request.runtime_min
+        )
+
+        print(
+            "Critic Rating:",
+            request.critic_rating
+        )
+
+        print(
+            "Audience Rating:",
+            request.audience_rating
+        )
+
+        print(
+            "Review Sentiment:",
+            request.review_sentiment
+        )
+
+        print(
+            "Review Volume:",
+            request.review_volume
+        )
+
+        print(
+            "Star Power:",
+            request.star_power
+        )
+
+        print(
+            "Social Media Buzz:",
+            request.social_media_buzz
+        )
+
         print(
             "Marketing Spend:",
             request.marketing_spend_million
@@ -173,40 +314,41 @@ class MoviePredictionService(
 
         try:
 
-            features = self.prepare_features(request)
+            features = self.prepare_features(
+                request
+            )
 
             print("\nPrepared Features:")
             print(features)
 
             # -------------------------------------------------
-            # IMPORTANT:
-            # Random Forest in train_model.py is trained
-            # using UN-SCALED features.
-            #
-            # XGBoost is trained using SCALED features.
-            #
-            # We therefore determine which model was saved
-            # from its class.
+            # Determine model type
             # -------------------------------------------------
 
-            model_name = type(self.model).__name__
+            model_name = type(
+                self.model
+            ).__name__
 
             if model_name == "XGBRegressor":
 
                 if self.scaler is None:
+
                     raise RuntimeError(
                         "Scaler is required for XGBoost "
                         "but scaler.pkl was not found."
                     )
 
-                model_features = self.scaler.transform(
-                    features
+                model_features = (
+                    self.scaler.transform(
+                        features
+                    )
                 )
 
             else:
 
                 # Random Forest:
                 # DO NOT SCALE.
+
                 model_features = features
 
             # -------------------------------------------------
@@ -214,11 +356,15 @@ class MoviePredictionService(
             # -------------------------------------------------
 
             predicted_revenue = float(
-                self.model.predict(model_features)[0]
+
+                self.model.predict(
+                    model_features
+                )[0]
+
             )
 
-            # Prevent negative revenue caused by model
-            # extrapolation.
+            # Prevent negative revenue
+
             predicted_revenue = max(
                 0.0,
                 predicted_revenue
@@ -232,6 +378,7 @@ class MoviePredictionService(
         except Exception as e:
 
             print(
+                f"[{self.worker_name}] "
                 "Prediction error:",
                 str(e)
             )
@@ -245,9 +392,16 @@ class MoviePredictionService(
             )
 
             return movie_pb2.PredictionResponse(
+
                 predicted_revenue=0.0,
-                message=f"Prediction failed: {str(e)}",
-                lamport_timestamp=self.clock.increment()
+
+                message=(
+                    f"Prediction failed: "
+                    f"{str(e)}"
+                ),
+
+                lamport_timestamp=
+                    self.clock.increment()
             )
 
         # -------------------------------------------------
@@ -257,6 +411,7 @@ class MoviePredictionService(
         response_time = self.clock.increment()
 
         print(
+            f"[{self.worker_name}] "
             "Response Lamport Timestamp:",
             response_time
         )
@@ -265,10 +420,23 @@ class MoviePredictionService(
         # STEP 5: Return actual prediction
         # -------------------------------------------------
 
+        print(
+            f"[{self.worker_name}] "
+            "Request completed successfully"
+        )
+
         return movie_pb2.PredictionResponse(
-            predicted_revenue=predicted_revenue,
-            message="Prediction completed successfully!",
-            lamport_timestamp=response_time
+
+            predicted_revenue=
+                predicted_revenue,
+
+            message=(
+                f"Prediction completed successfully "
+                f"by {self.worker_name}!"
+            ),
+
+            lamport_timestamp=
+                response_time
         )
 
 
@@ -276,49 +444,108 @@ class MoviePredictionService(
 # SERVER
 # =========================================================
 
-def serve():
+def serve(port):
+
+    worker_name = (
+        f"Prediction-Server-{port}"
+    )
 
     server = grpc.server(
+
         futures.ThreadPoolExecutor(
             max_workers=10
         )
+
     )
 
     movie_pb2_grpc.add_MoviePredictionServiceServicer_to_server(
-        MoviePredictionService(),
+
+        MoviePredictionService(
+            worker_name
+        ),
+
         server
+
     )
 
     server.add_insecure_port(
-        "[::]:50051"
+        f"[::]:{port}"
     )
 
     server.start()
 
+    print("\n========================================")
     print(
-        "\n========================================"
+        "MOVIE PREDICTION gRPC SERVER"
     )
+    print("========================================")
+
     print(
-        "Movie Prediction gRPC Server"
+        "Worker:",
+        worker_name
     )
+
     print(
-        "========================================"
+        "Port:",
+        port
     )
-    print(
-        "Prediction Server running on port 50051"
-    )
+
     print(
         "Actual ML Model: ENABLED"
     )
+
     print(
         "Lamport Clock: ENABLED"
     )
+
     print(
-        "========================================\n"
+        "Least Connections Backend: ENABLED"
     )
 
-    server.wait_for_termination()
+    print("========================================\n")
 
+    try:
+
+        server.wait_for_termination()
+
+    except KeyboardInterrupt:
+
+        print(
+            f"\n[{worker_name}] "
+            "Server shutting down..."
+        )
+
+        server.stop(0)
+
+
+# =========================================================
+# MAIN
+# =========================================================
 
 if __name__ == "__main__":
-    serve()
+
+    if len(sys.argv) != 2:
+
+        print(
+            "Usage:"
+        )
+
+        print(
+            "python prediction_server.py PORT"
+        )
+
+        print(
+            "\nExample:"
+        )
+
+        print(
+            "python prediction_server.py 50051"
+        )
+
+        sys.exit(1)
+
+    port = int(
+        sys.argv[1]
+    )
+
+    serve(port)
